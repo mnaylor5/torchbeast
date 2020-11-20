@@ -637,7 +637,7 @@ Net = AtariNet
 
 def create_env(flags):
     return football_wrappers.wrap_pytorch(
-        football_wrappers.wrap_deepmind(
+        football_wrappers.wrap_football(
             football_wrappers.make_football(flags.env),
             clip_rewards=False,
             frame_stack=True,
