@@ -652,7 +652,7 @@ def create_env(flags):
             football_wrappers.make_football(flags.env),
             clip_rewards=False,
             frame_stack=True,
-            scale=True,
+            scale=False,
         )
     )
 
