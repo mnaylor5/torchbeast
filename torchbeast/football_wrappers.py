@@ -296,9 +296,10 @@ def make_football(env_id, max_episode_steps=None):
                                       write_goal_dumps=False, 
                                       write_full_episode_dumps=False, 
                                       rewards='scoring,checkpoints',
+                                          channel_dimensions=(84,84),
                                       render=False)
     env = NoopResetEnv(env, noop_max=30)
-    env = MaxAndSkipEnv(env, skip=4) # TODO: does this make sense?
+#     env = MaxAndSkipEnv(env, skip=4) # TODO: does this make sense?
 
     assert max_episode_steps is None
 
@@ -323,6 +324,7 @@ def wrap_deepmind(env, episode_life=True, clip_rewards=True, frame_stack=False, 
 def wrap_football(env, clip_rewards=True, frame_stack=False, scale=False):
     """Configure environment for Google Research
     """
+    #env = WarpFrame(env) # not warping b/c we're already passing 84 x 84
     if scale:
         env = ScaledFloatFrame(env)
     if clip_rewards:
