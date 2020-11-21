@@ -68,6 +68,8 @@ parser.add_argument("--disable_cuda", action="store_true",
                     help="Disable CUDA.")
 parser.add_argument("--use_lstm", action="store_true",
                     help="Use LSTM in agent model.")
+parser.add_argument('--load_checkpoint_weights', default=None,
+                    help="Load model weights from a checkpoint")
 
 # Loss settings.
 parser.add_argument("--entropy_cost", default=0.0006,
@@ -348,6 +350,12 @@ def train(flags):  # pylint: disable=too-many-branches, too-many-statements
 
     model = Net(env.observation_space.shape, env.action_space.n, flags.use_lstm)
     buffers = create_buffers(flags, env.observation_space.shape, model.num_actions)
+    
+    if flags.load_checkpoint_weights is not None:
+        logging.info(f"Loading model weights from {flags.load_checkpoint_weights}")
+        initial_checkpoint = torch.load(os.path.join(flags.load_checkpoint_weights, 'model.tar'), map_location="cpu")
+        model.load_state_dict(initial_checkpoint["model_state_dict"])
+        
 
     model.share_memory()
 
@@ -383,6 +391,9 @@ def train(flags):  # pylint: disable=too-many-branches, too-many-statements
     learner_model = Net(
         env.observation_space.shape, env.action_space.n, flags.use_lstm
     ).to(device=flags.device)
+    
+    if flags.load_checkpoint_weights is not None:
+        learner_model.load_state_dict(model.state_dict())
 
     optimizer = torch.optim.RMSprop(
         learner_model.parameters(),
