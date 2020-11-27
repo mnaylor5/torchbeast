@@ -298,7 +298,7 @@ def make_football(env_id, max_episode_steps=None):
                                       rewards='scoring,checkpoints',
                                           channel_dimensions=(84,84),
                                       render=False)
-    env = NoopResetEnv(env, noop_max=30)
+#     env = NoopResetEnv(env, noop_max=30)
 #     env = MaxAndSkipEnv(env, skip=4) # TODO: does this make sense?
 
     assert max_episode_steps is None
